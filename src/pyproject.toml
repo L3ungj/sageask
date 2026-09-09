@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sageask"
+version = "0.1.0"
+description = "SageAsk CLI — post questions to Discord, check replies"
+dependencies = ["python-dotenv", "requests"]
+requires-python = ">=3.9"
+
+[project.scripts]
+sageask = "sageask.sageask:main"
