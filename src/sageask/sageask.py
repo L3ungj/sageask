@@ -1,7 +1,15 @@
 """SageAsk CLI — post questions to Discord, check replies."""
 
-import argparse
+import os
 import sys
+
+# When run directly (python3 src/sageask/sageask.py), ensure src/ is on sys.path
+# so `import sageask` finds the package, not the file itself
+_here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _here not in sys.path:
+    sys.path.insert(0, _here)
+
+import argparse
 from sageask import config, db, discord
 
 
