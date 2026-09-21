@@ -8,13 +8,6 @@ DISCORD_API = "https://discord.com/api/v10"
 USER_AGENT = "Sage-Asker/1.0"
 
 
-class DiscordAPIError(Exception):
-    def __init__(self, status_code, body):
-        self.status_code = status_code
-        self.body = body
-        super().__init__(f"Discord API error {status_code}: {body}")
-
-
 def _headers():
     return {
         "Authorization": f"Bot {config.DISCORD_BOT_TOKEN}",

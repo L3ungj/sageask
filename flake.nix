@@ -33,7 +33,7 @@
           ];
           SHELL = "bash";
           shellHook = ''
-            export SAGEASK_DATA=.
+            export SAGEASK_DATA=$(pwd)
           '';
         };
       }

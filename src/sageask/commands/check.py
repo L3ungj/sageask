@@ -1,5 +1,6 @@
 """Check command — check for replies in the thread."""
 
+import requests
 import sys
 
 from sageask import db, config, discord
@@ -30,8 +31,8 @@ def run(question_discord_id=None):
     try:
         try:
             messages = discord.get_thread_messages(message_id, limit=50)
-        except discord.DiscordAPIError as e:
-            if e.status_code == 404:
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 404:
                 print("No thread found for this question yet. Create a thread from the message in Discord first.")
                 return 0
             raise
@@ -51,8 +52,10 @@ def run(question_discord_id=None):
             timestamp = latest.get("timestamp", "")
 
             db.mark_replied(conn, q["id"], reply_content, timestamp)
-            author = latest.get("author", {}).get("username", "unknown")
-            print(f"{author} replied: {reply_content}")
+            question, answer = db.get_question_and_answer(conn, q["id"])
+            print(f"Question: {question}")
+            print(f"Answer: {answer}")
+            print(f"Reply: {reply_content}")
         else:
             print("No replies yet in the thread.")
     finally:

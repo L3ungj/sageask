@@ -12,9 +12,9 @@ Add `sageask` as a local input to your flake:
 
 ```nix
 # In your flake.nix inputs:
-inputs.sageask = {
-  url = "path:/home/kazu/dev/sageask";
-  inputs.nixpkgs.follows = "nixpkgs";  # share your flake's nixpkgs
+sageask = {
+  url = "github:L3ungj/sageask";
+  inputs.nixpkgs.follows = "nixpkgs";
 };
 ```
 
@@ -23,7 +23,7 @@ Then add the package to your system or home configuration:
 **System-wide (configuration.nix):**
 ```nix
 environment.systemPackages = with pkgs; [
-  inputs.sageask.packages.x86_64-linux.default
+  inputs.sageask.packages.${pkgs.stdenv.hostPlatform.system}.default
 ];
 ```
 
@@ -31,7 +31,7 @@ environment.systemPackages = with pkgs; [
 ```nix
 home-manager.users.your-user = { pkgs, ... }: {
   home.packages = with pkgs; [
-    inputs.sageask.packages.x86_64-linux.default
+    inputs.sageask.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 };
 ```
@@ -39,7 +39,6 @@ home-manager.users.your-user = { pkgs, ... }: {
 **Option 2: From the source directory**
 
 ```bash
-cd /home/kazu/dev/sageask
 nix build
 # Run the built binary:
 ./result/bin/sageask --help
@@ -49,13 +48,13 @@ nix profile install .
 sageask --help
 ```
 
-**Option 3: Development shell**
+**Option 3: Development shell (Recommend for testing)**
 
 ```bash
-cd /home/kazu/dev/sageask
 nix develop
 # SAGEASK_DATA=. is set automatically
 # Place .env and questions.db in your working directory
+# Run PYTHONPATH=src python3 -m sageask --help
 ```
 
 ### Setup
@@ -86,24 +85,21 @@ SAGEASK_DATA=/path/to/data sageask status
 
 ## Usage
 
-```bash
-# View question bank
-sageask status [course_id]
+`sageask --help`:
+```
+usage: sageask [-h] {status,post,check,grade,add,list} ...
 
-# Post next unanswered question
-sageask post
+SageAsk: post questions to Discord, check replies
 
-# Post a specific question
-sageask post --id <question_id> --course <course_id>
+positional arguments:
+  {status,post,check,grade,add,list}
+    status              Show question bank status
+    post                Post next unanswered (or specified) question
+    check               Check for user's reply
+    grade               Grade a student's reply
+    add                 Add a course, topic, or question
+    list                List courses, topics, or questions
 
-# Check for replies
-sageask check
-sageask check --question <discord_message_id>
-
-# Grade a reply
-sageask grade <mark> <comment>
-sageask grade <mark> <comment> --question <discord_message_id>
-
-# Add a new question to the bank
-sageask add <part> <course_name> "question text"
+options:
+  -h, --help            show this help message and exit
 ```
