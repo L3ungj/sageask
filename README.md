@@ -54,7 +54,7 @@ sageask --help
 nix develop
 # SAGEASK_DATA=. is set automatically
 # Place .env and questions.db in your working directory
-# Run PYTHONPATH=src python3 -m sageask --help
+# Run sageask --help
 ```
 
 ### Setup

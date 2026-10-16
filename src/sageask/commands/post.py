@@ -5,7 +5,7 @@ import sys
 from sageask import db, config, discord
 
 
-def run(question_text, answer_text, question_id, course_id, max_mark, topic_name):
+def run(question_text, answer_text, question_id, course_id, max_mark, topic_name, part=None):
     """Post a question to Discord."""
     # Inline insert mode: --question + --answer + --course + --max_mark
     if question_text is not None:
@@ -46,7 +46,7 @@ def run(question_text, answer_text, question_id, course_id, max_mark, topic_name
         if question_id:
             q = db.get_question_by_id(conn, question_id)
         else:
-            q = db.get_next_question_srs(conn)
+            q = db.get_next_question_srs(conn, part=part)
 
         if q is None:
             print("No unanswered question found.", file=sys.stderr)

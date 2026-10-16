@@ -424,13 +424,24 @@ def compute_topic_score(conn, topic_id):
     return (score, scores)
 
 
-def get_next_question_srs(conn):
+def get_next_question_srs(conn, part=None):
     """Return the next question using SRS score-based topic selection.
 
     Picks the topic with lowest score (worst performance + stalest review),
     then returns the first unanswered question of that topic.
+
+    Args:
+        conn: database connection
+        part: optional course part filter (IA, IB, II, III)
     """
     topics = get_topic_topic_summary(conn)
+    if not topics:
+        return None
+
+    if part is not None:
+        part = part.upper()
+        topics = [t for t in topics if t.get("course_part", "").upper() == part]
+
     if not topics:
         return None
 

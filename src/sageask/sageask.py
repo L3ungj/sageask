@@ -29,6 +29,8 @@ def main():
     post_parser.add_argument("--id", type=int, help="Specific question ID to post")
     post_parser.add_argument("--max_mark", type=int, help="Max mark (required with --question)")
     post_parser.add_argument("--topic", help="Topic name (required with --question)")
+    post_parser.add_argument("--part", choices=["IA", "IB", "II", "III"],
+                             help="Filter questions by course part")
 
     # check
     check_parser = subparsers.add_parser("check", help="Check for user's reply")
@@ -79,7 +81,7 @@ def main():
         sys.exit(status.run(args.course))
     elif args.command == "post":
         sys.exit(post.run(args.question, args.answer, args.id, args.course,
-                          args.max_mark, args.topic))
+                          args.max_mark, args.topic, args.part))
     elif args.command == "check":
         sys.exit(check.run(args.question))
     elif args.command == "grade":
