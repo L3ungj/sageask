@@ -14,6 +14,8 @@ def run(course_id=None):
             print()
 
         summary = db.get_summary(conn)
+        db_path = db._resolve_db_path()
+        print(f"Database: {db_path}")
         print(f"Total: {summary['total']}")
         print(f"Unanswered: {summary['unanswered']}")
         print(f"Graded: {summary['graded']}")
