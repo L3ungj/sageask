@@ -25,15 +25,16 @@ def run(question_discord_id=None):
     finally:
         conn.close()
 
-    message_id = q["discord_id"]
+    # Thread ID is the same as the Discord message ID for public threads
+    thread_id = q["discord_id"]
 
     conn = db.get_db()
     try:
         try:
-            messages = discord.get_thread_messages(message_id, limit=50)
+            messages = discord.get_thread_messages(thread_id, limit=50)
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 404:
-                print("No thread found for this question yet. Create a thread from the message in Discord first.")
+                print("No thread found for this question yet.")
                 return 0
             raise
 
@@ -42,7 +43,7 @@ def run(question_discord_id=None):
             author_id = msg.get("author", {}).get("id")
             if author_id not in config.DISCORD_ALLOWED_USERS:
                 continue
-            if msg.get("id") == message_id or msg.get("type") != 0:
+            if msg.get("id") == q["discord_id"] or msg.get("type") != 0:
                 continue
             allowed_replies.append(msg)
 

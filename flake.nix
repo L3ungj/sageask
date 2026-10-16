@@ -34,6 +34,7 @@
           SHELL = "bash";
           shellHook = ''
             export SAGEASK_DATA=$(pwd)
+            alias sageask="PYTHONPATH=src python3 -m sageask"
           '';
         };
       }

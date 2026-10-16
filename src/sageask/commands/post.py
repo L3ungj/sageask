@@ -57,10 +57,17 @@ def run(question_text, answer_text, question_id, course_id, max_mark, topic_name
             f"[({q['course_part']}) {q['course_name']} ({q['topic_name']})] {q['question']} [{q['max_mark']} marks]",
         )
 
+        # Create thread under the message (thread channel ID equals message ID for public threads)
+        thread_name = f"[({q['course_part']}) {q['course_name']}] {q['question'][:50]}"
+        discord.create_thread(
+            config.DISCORD_HOME_CHANNEL,
+            msg_id,
+            name=thread_name,
+        )
+
         db.mark_posted(conn, q["id"], msg_id)
         print(f"Question ID: {q['id']}")
         print(f"Discord message ID: {msg_id}")
-        print("Create a thread from this message in Discord, then use 'sageask check' to fetch replies.")
     finally:
         conn.close()
 

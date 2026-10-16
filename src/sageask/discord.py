@@ -24,6 +24,18 @@ def post_message(channel_id, content):
     return r.json()["id"]
 
 
+def create_thread(channel_id, message_id, name, auto_archive_duration=60):
+    """Create a thread under a message. Returns the thread channel ID."""
+    r = requests.post(
+        f"{DISCORD_API}/channels/{channel_id}/messages/{message_id}/threads",
+        json={"name": name, "auto_archive_duration": auto_archive_duration},
+        headers=_headers(),
+        timeout=15,
+    )
+    r.raise_for_status()
+    return r.json()["id"]
+
+
 def get_thread_messages(thread_id, limit=50):
     """Get messages from a thread (threads are channels)."""
     r = requests.get(f"{DISCORD_API}/channels/{thread_id}/messages?limit={limit}",
